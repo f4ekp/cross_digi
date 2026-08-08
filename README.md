@@ -18,21 +18,21 @@ Ce dépôt documente **les deux méthodes de liaison possibles** entre Direwolf 
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture simplifiée
 
 ```
              ┌──────────────┐
-             │  2m radio     │
-             │  144.800 MHz  │
-             └───────┬───────┘
-                      │  (Channel 0, interne)
-                      ▼
+             │  2m radio    │
+             │  144.800 MHz │
+             └───────┬──────┘
+                     │  (Channel 0, interne)
+                     ▼
    ┌──────────────────────────────────┐
-   │            Direwolf                │
-   │   TNC logiciel + digipeater + IGate │
-   └──────────────────────┬────────────┘
-                      ▲    │  (Channel 11, externe)
-                      │    ▼
+   │            Direwolf              │
+   │ TNC logiciel + digipeater + IGate│
+   └──────────────────────┬───────────┘
+                      ▲   │  (Channel 11, externe)
+                      │   ▼
              ┌────────┴──────────┐
              │  LoRa APRS TNC     │
              │  (firmware CA2RXU) │
@@ -69,7 +69,7 @@ Direwolf gère un canal radio interne classique (**CHANNEL 0**, la VHF 144.800 M
 
 - Flasher le firmware iGate/digipeater CA2RXU sur le module (voir sa documentation)
 - Configurer l'indicatif, la fréquence LoRa (433.775 MHz par défaut en Europe) et les paramètres LoRa (SF, BW, CR)
-- **Ne pas activer** les fonctions digipeater/IGate internes du module : il doit être utilisé en simple TNC KISS, tout le digipeat/IGate étant délégué à Direwolf
+- **Ne pas activer** les fonctions digipeater/IGate internes du module : il doit être utilisé en simple TNC KISS, si tout le digipeat/IGate est délégué à Direwolf ,sinon vous pouvez déléguer cette fonctionnalité au module LoRa
 - Dans l'écran **TNC** du firmware, selon la méthode choisie :
 
   **Pour une liaison réseau (`NCHANNEL`)** :
@@ -83,11 +83,6 @@ Direwolf gère un canal radio interne classique (**CHANNEL 0**, la VHF 144.800 M
   - Relever le **port série** utilisé une fois le module branché en USB (ex. `/dev/ttyACM0` sous Linux)
 
 ### 2. Installer Direwolf
-
-```bash
-sudo apt update
-sudo apt install direwolf
-```
 
 > ℹ️ `SCHANNEL` (port série) nécessite Direwolf 1.9 (branche « dev » au moment de la rédaction de la doc officielle). `NCHANNEL` (réseau) est disponible depuis la 1.8. Vérifie ta version avec `direwolf --version` et recompile depuis les sources si besoin.
 
@@ -112,6 +107,9 @@ NCHANNEL 11 192.168.1.238 8001
 
 # Option B - liaison série (USB)
 #SCHANNEL 11 /dev/ttyACM0 115200
+
+# --- digipeat VHF -> VHF
+DIGIPEAT 0 0 ^WIDE[3-7]-[1-7]$|^TEST$ ^WIDE[12]-[12]$
 
 # --- Cross-digipeat entre VHF (0) et LoRa (11), dans les deux sens ---
 DIGIPEAT 0 11 ^WIDE[3-7]-[1-7]$|^TEST$ ^WIDE[12]-[12]$
@@ -202,19 +200,18 @@ sudo systemctl enable --now direwolf-cross-digi.service
 
 ## 📄 Licence
 
-*(à préciser — MIT, GPL, etc.)*
+*(GPL)*
 
 ---
 
-## 🙏 Remerciements
+## 🙏 References
 
 - [John Langner, WB2OSZ](https://github.com/wb2osz) pour Direwolf et la documentation du pont VHF/LoRa
 - [Geoffrey, F4FXL](https://www.f4fxl.org/) pour les travaux précurseurs sur le pont VHF ↔ LoRa APRS
 - [Ricardo Guzman, CA2RXU](https://github.com/richonguzman) pour le firmware iGate/digipeater LoRa APRS
-- La communauté APRS/LoRa APRS
 
 ---
 
 ## 📡 Contact
 
-*(ton indicatif radioamateur / contact)*
+*(F4EKP / f4ekp@hotmail.com)*
